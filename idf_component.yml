@@ -1,0 +1,14 @@
+## IDF Component Manager Manifest File
+version: "0.0.1"
+license: "Apache-2.0"
+description: "WS2812 driver using SPI"
+url: "https://github.com/redstonee/OdePixels"
+repository: "https://github.com/redstonee/OdePixels"
+maintainers:
+  - RedStonee <dc_redstone@outlook.com>
+tags:
+  - WS2812
+  - SPI
+dependencies:
+  idf:
+    version: ">=5.0"
