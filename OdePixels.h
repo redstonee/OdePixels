@@ -33,7 +33,7 @@ public:
 
     bool init(int pixelPin,
               spi_host_device_t spiHost = SPI2_HOST,
-              int frequency = 8'000'000);
+              int frequency = 8000000);
 
     static uint32_t rgb2u32(uint8_t r, uint8_t g, uint8_t b);
     static uint32_t hsv2u32(uint16_t hue, uint8_t sat, uint8_t val);

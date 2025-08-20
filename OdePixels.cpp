@@ -97,49 +97,60 @@ uint32_t OdePixels::rgb2u32(uint8_t r, uint8_t g, uint8_t b)
  */
 uint32_t OdePixels::hsv2u32(uint16_t hue, uint8_t sat, uint8_t val)
 {
-    uint8_t r, g, b;
+    uint16_t c = (static_cast<uint16_t>(val) * sat) / 255;
 
-    // Convert HSV to RGB
-    uint8_t region = hue / 43;
-    uint8_t remainder = (hue - (region * 43)) * 6;
+    uint16_t h_scaled = hue * 425 / 100; // Scale to 0-1530 range (255 * 6)
+    uint8_t sector = h_scaled / 255;
+    uint8_t pos = h_scaled % 255;
 
-    uint8_t p = (val * (255 - sat)) >> 8;
-    uint8_t q = (val * (255 - ((sat * remainder) >> 8))) >> 8;
-    uint8_t t = (val * (255 - ((sat * (255 - remainder)) >> 8))) >> 8;
+    uint16_t x;
+    if (pos < 128)
+    {
+        x = (c * pos) / 127;
+    }
+    else
+    {
+        x = (c * (255 - pos)) / 127;
+    }
 
-    switch (region)
+    uint16_t m = val - c;
+
+    uint8_t r = 0, g = 0, b = 0;
+
+    // 根据区间确定 RGB
+    switch (sector)
     {
     case 0:
-        r = val;
-        g = t;
-        b = p;
+        r = c;
+        g = x;
         break;
     case 1:
-        r = q;
-        g = val;
-        b = p;
+        r = x;
+        g = c;
         break;
     case 2:
-        r = p;
-        g = val;
-        b = t;
+        g = c;
+        b = x;
         break;
     case 3:
-        r = p;
-        g = q;
-        b = val;
+        g = x;
+        b = c;
         break;
     case 4:
-        r = t;
-        g = p;
-        b = val;
+        r = x;
+        b = c;
+        break;
+    case 5:
+        r = c;
+        b = x;
         break;
     default:
-        r = val;
-        g = p;
-        b = q;
         break;
     }
+
+    r += m;
+    g += m;
+    b += m;
 
     return rgb2u32(r, g, b);
 }
